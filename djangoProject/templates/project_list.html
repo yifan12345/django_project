@@ -1,0 +1,44 @@
+{% extends "manage.html" %}
+{% block manage %}
+
+    <div class="navbar navbar-expand navbar-light bg-white">
+        <div class="flex-fill w-100 card" style="height: 100%;width: 100%">
+            <div class="card-header">
+                <h4 class="mb-0 card-title" style="float: left">项目管理</h4>
+                <button onclick="add_project()" type="button" class="btn btn-success" style="float:right;">新增</button>
+            </div>
+            <table class="my-0 table table-striped">
+
+                <thead>
+
+                <tr>
+                    <th>id</th>
+                    <th>名称</th>
+                    <th>描述</th>
+                    <th>状态</th>
+                    <th>创建时间</th>
+                    <th>更新时间</th>
+                    <th>编辑</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for p in projects %}
+                    <tr>
+                        <td>{{ p.id }}</td>
+                        <td>{{ p.name }}</td>
+                        <td>{{ p.describe }}</td>
+                        <td>{{ p.status }}</td>
+                        <td>{{ p.create_time }}</td>
+                        <td>{{ p.update_time }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script>
+        function add_project() {
+            window.open("/project/add")
+        }
+    </script>
+{% endblock %}

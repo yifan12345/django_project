@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block base %}
+    <main id="content">
+        <!-- Hero Section -->
+        <div class="gradient-overlay-half-dark-v3 bg-img-hero" style="
+                background-image: url(https://dev.17elian.com/sso/images/login-bg02.png);">
+            <!-- Main Content -->
+            <div class="d-lg-flex align-items-lg-center height-85vh--lg">
+                <div class="container space-2 space-0--lg mt-lg-8">
+                    <div class="row justify-content-lg-between align-items-lg-center">
+                        <div class="col-lg-5 mb-7 mb-lg-0">
+                            <!-- Title -->
+                            <span class="d-block text-white text-uppercase mb-2"></span>
+                            <h1 class="display-4 font-size-48--md-down text-white mb-0"></h1>
+                            <!-- End Title -->
+                        </div>
+                        <div class="col-lg-5">
+                            <!-- Signup Form -->
+                            <div class="bg-white shadow-sm rounded p-6">
+                                <form action="/login/" method="post" class="js-validate" novalidate="novalidate">
+                                    <div class="mb-4">
+                                        <h2 class="h4">用户登录</h2>
+                                    </div>
+                                    <div class="js-form-message mb-3">
+                                        <div class="js-focus-state input-group input-group form">
+                                            <input type="text" class="form-control form__input" name="username"
+                                                   required=""
+                                                   placeholder="Enter your username" aria-label="Enter your username">
+                                        </div>
+                                    </div>
+                                    <div class="js-form-message mb-3">
+                                        <div class="js-focus-state input-group input-group form">
+                                            <input type="password" class="form-control form__input" name="password"
+                                                   required=""
+                                                   placeholder="Enter your password" aria-label="Enter your password">
+                                        </div>
+                                    </div>
+                                    {{ error }}<br>
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-block btn-primary">登录</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End Main Content -->
+        </div>
+    </main>
+{% endblock %}
