@@ -1,0 +1,21 @@
+{% extends "manage.html" %}
+{% block manage %}
+
+    <div class="navbar navbar-expand navbar-light bg-white">
+        <div class="flex-fill w-100 card" style="height: 100%;width: 100%">
+            <div class="card-header">
+                <h4 class="mb-0 card-title" style="float: left">新增项目</h4>
+            </div>
+
+            <div style="margin-left: 20px;margin-right: 20px;width: 80%">
+                <form action="/project/add/" method="post">
+                    <div class="form-selector__input">
+                        {{ form }}<br>
+                        {% csrf_token %}
+                        <input type="submit" class="btn btn-success" value="新建">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

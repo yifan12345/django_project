@@ -5,7 +5,9 @@
         <div class="flex-fill w-100 card" style="height: 100%;width: 100%">
             <div class="card-header">
                 <h4 class="mb-0 card-title" style="float: left">项目管理</h4>
-                <button onclick="add_project()" type="button" class="btn btn-success" style="float:right;">新增</button>
+                <button onclick="add_project()" type="button" class="btn btn-success" style="float:right;">
+                    <a href="/project/add"></a>
+                    新增</button>
             </div>
             <table class="my-0 table table-striped">
 
@@ -28,8 +30,12 @@
                         <td>{{ p.name }}</td>
                         <td>{{ p.describe }}</td>
                         <td>{{ p.status }}</td>
-                        <td>{{ p.create_time }}</td>
-                        <td>{{ p.update_time }}</td>
+                        <td>{{ p.create_time |date:"Y-m-d H:i:s"}}</td>
+                        <td>{{ p.update_time |date:"Y-m-d H:i:s"}}</td>
+                        <td>
+                            <a href="/project/edit/{{ p.id }}">编辑</a>
+                            <a onclick="del_project()" href="/project/delete/{{ p.id }}">删除</a>
+                        </td>
                     </tr>
                 {% endfor %}
                 </tbody>
@@ -38,7 +44,11 @@
     </div>
     <script>
         function add_project() {
-            window.open("/project/add")
+            window.location.href = "/project/add/";
+        }
+
+        function del_project() {
+            window.confirm("是否确认要删除？")
         }
     </script>
 {% endblock %}
