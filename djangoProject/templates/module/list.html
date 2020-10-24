@@ -4,9 +4,9 @@
     <div class="navbar navbar-expand navbar-light bg-white">
         <div class="flex-fill w-100 card" style="height: 100%;width: 100%">
             <div class="card-header">
-                <h4 class="mb-0 card-title" style="float: left">项目管理</h4>
-                <button onclick="add_project()" type="button" class="btn btn-success" style="float:right;">
-                    <a href="/manage/project_add"></a>
+                <h4 class="mb-0 card-title" style="float: left">模块管理</h4>
+                <button onclick="add_module()" type="button" class="btn btn-success" style="float:right;">
+                    <a href="/manage/module_add"></a>
                     新增</button>
             </div>
             <table class="my-0 table table-striped">
@@ -17,24 +17,24 @@
                     <th>id</th>
                     <th>名称</th>
                     <th>描述</th>
-                    <th>状态</th>
+                    <th>所属项目</th>
                     <th>创建时间</th>
                     <th>更新时间</th>
                     <th>编辑</th>
                 </tr>
                 </thead>
                 <tbody>
-                {% for p in projects %}
+                {% for m in module %}
                     <tr>
-                        <td>{{ p.id }}</td>
-                        <td>{{ p.name }}</td>
-                        <td>{{ p.describe }}</td>
-                        <td>{{ p.status }}</td>
-                        <td>{{ p.create_time |date:"Y-m-d"}}</td>
-                        <td>{{ p.update_time |date:"Y-m-d"}}</td>
+                        <td>{{ m.id }}</td>
+                        <td>{{ m.name }}</td>
+                        <td>{{ m.describe }}</td>
+                        <td>{{ m.project }}</td>
+                        <td>{{ m.create_time |date:"Y-m-d"}}</td>
+                        <td>{{ m.update_time |date:"Y-m-d"}}</td>
                         <td>
-                            <a href="/manage/project_edit/{{ p.id }}">编辑</a>
-                            <a onclick="del_project()" href="/manage/project_delete/{{ p.id }}">删除</a>
+                            <a href="/manage/module_edit/{{ m.id }}">编辑</a>
+                            <a onclick="del_module()" href="/manage/module_delete/{{ m.id }}">删除</a>
                         </td>
                     </tr>
                 {% endfor %}
@@ -43,11 +43,11 @@
         </div>
     </div>
     <script>
-        function add_project() {
-            window.location.href = "/manage/project_add/";
+        function add_module() {
+            window.location.href = "/manage/module_add/";
         }
 
-        function del_project() {
+        function del_module() {
             window.confirm("是否确认要删除？")
         }
     </script>

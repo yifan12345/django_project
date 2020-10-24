@@ -1,0 +1,75 @@
+{% extends "manage.html" %}
+{% block manage %}
+
+    <div class="navbar navbar-expand navbar-light bg-white">
+        <div class="flex-fill w-100 card" style="height: 100%;width: 100%">
+            <div class="card-header">
+                <h4 class="mb-0 card-title" style="float: left">编辑模块</h4>
+            </div>
+
+            <div style="margin-left: 20px;margin-right: 20px;width: 80%">
+                <form action="/manage/module_edit/{{ id }}" method="post">
+                    <label>项目：</label>
+                    {{ form.project }}<br>
+                    <label>名称：</label>
+                    {{ form.name }}
+                    <label>描述：</label>
+                    {{ form.describe }}<br>
+
+                    {% csrf_token %}
+                    <input type="submit" class="btn btn-success" value="更新" style="float: right">
+
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        select[name=project] {
+            display: block;
+            width: 100%;
+            height: calc(1.8125rem + 2px);
+            padding: 0.25rem 0.7rem;
+            font-size: 0.875rem;
+            font-weight: 400;
+            line-height: 1.5;
+            color: #495057;
+            background-color: #fff;
+            background-clip: padding-box;
+            border: 1px solid #ced4da;
+            border-radius: 0.2rem;
+            transition: border-color 0.15s
+        }
+
+        input[name=name] {
+            display: block;
+            width: 100%;
+            height: calc(1.8125rem + 2px);
+            padding: 0.25rem 0.7rem;
+            font-size: 0.875rem;
+            font-weight: 400;
+            line-height: 1.5;
+            color: #495057;
+            background-color: #fff;
+            background-clip: padding-box;
+            border: 1px solid #ced4da;
+            border-radius: 0.2rem;
+            transition: border-color 0.15s
+        }
+
+        textarea[name=describe] {
+            display: block;
+            width: 100%;
+            padding: 0.25rem 0.7rem;
+            font-size: 0.875rem;
+            font-weight: 400;
+            line-height: 1.5;
+            color: #495057;
+            background-color: #fff;
+            background-clip: padding-box;
+            border: 1px solid #ced4da;
+            border-radius: 0.2rem;
+            transition: border-color 0.15s
+        }
+    </style>
+{% endblock %}

@@ -1,6 +1,6 @@
 from django import forms
 from django.forms import widgets
-from app_manage.models import Project
+from app_manage.models import Project,Module
 
 
 # 项目新增表单
@@ -17,3 +17,10 @@ class ProjectEditForm(forms.ModelForm):
     class Meta:
         model = Project
         fields = ['name', 'describe', 'status']
+
+
+# 模块新增表单
+class ModuleForm(forms.ModelForm):
+    class Meta:
+        model = Module
+        fields = ['project','name', 'describe']
