@@ -8,16 +8,12 @@ from django.http import HttpResponseRedirect
 # Create your views here.
 @login_required
 def list_project(request):
-    '''
-    接口列表
-    :param request:
-    :return:
-    '''
-    username= request.COOKIES.get('user','')
+    '''项目列表'''
+    username = request.COOKIES.get('user', '')
     projects_list = Project.objects.all()
 
     return render(request, "projecrt/list.html", {"projects": projects_list,
-                                                  "user":username})
+                                                  "user": username})
 
 
 @login_required

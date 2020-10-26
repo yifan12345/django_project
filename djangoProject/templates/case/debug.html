@@ -1,0 +1,68 @@
+{% extends "manage.html" %}
+{% block manage %}
+
+    <div class="navbar navbar-expand navbar-light bg-white">
+        <div class="flex-fill w-100 card" style="height: 100%;width: 100%">
+            <div class="card-header">
+                <h4 class="mb-0 card-title" style="float: left">新增项目</h4>
+            </div>
+
+            <div style="margin-left: 20px;margin-right: 20px;width: 80%">
+                <div class="input-group" style="height: 50px">
+                    <span class="input-group-addon"
+                          style="margin-top: 6px;margin-right: 10px;"> URL: </span>
+                    <input id="req_url" type="text" class="form-control" value="http">
+                </div>
+                <div>
+                    <label>* 请求方法：</label>
+                    <label class="radio-inline">
+                        <input type="radio" name="req_method" id="get">GET
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="req_method" id="post">POST
+                    </label>
+                </div>
+                <div class="input-group" style="height: 50px">
+                    <span class="input-group-addon"
+                          style="margin-top: 6px;margin-right: 10px;"> header: </span>
+                    <label for="req_url"></label><input id="req_url" type="text" class="form-control" value="{}">
+                </div>
+                <div>
+                    <label>* 参数类型：</label>
+                    <label class="radio-inline">
+                        <input type="radio" name="par_type" id="form">form-data
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="par_type" id="JSON">JSON
+                    </label>
+                </div>
+                <div class="input-group" style="height: 50px">
+                    <span class="input-group-addon"
+                          style="margin-top: 6px;margin-right: 10px;"> 参数: </span>
+                    <label for="parameter"></label><input id="parameter" type="text" class="form-control" value="{}">
+                </div>
+                <p style="color: #888989">说明：以字典的形式设置参数，如{"name":"yifan"}</p>
+
+                <div style="float: right;margin-right: 10px;">
+                    <button type="button" class="btn btn-primary" onclick="sendFun()">发送</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script crossorigin="anonymous"
+            integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg=="
+            src="https://lib.baomitu.com/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        function sendFun() {
+            $.get("/case/send_req/", {
+                id: "1",
+                name: "tom"
+
+            }, function (data, status) {
+                console.log("data", data)
+                console.log("status", status)
+            })
+        }
+
+    </script>
+{% endblock %}
