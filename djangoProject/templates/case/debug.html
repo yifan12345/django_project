@@ -22,10 +22,14 @@
                         <input type="radio" name="req_method" id="post" value="post">POST
                     </label>
                 </div>
-                <div class="input-group" style="height: 50px">
+                <div class="input-group" style="height: 230px">
                     <span class="input-group-addon"
                           style="margin-top: 6px;margin-right: 10px;"> header: </span>
-                    <label for="header"></label><input id="header" type="text" class="form-control" value="{}">
+                    <div class="input-group mb-3">
+                        <div class="input-group">
+                            <div id="header" style="width: 100%"></div>
+                        </div>
+                    </div>
                 </div>
                 <div>
                     <label>* 参数类型：</label>
@@ -36,12 +40,16 @@
                         <input type="radio" name="par_type" id="json" value="json">JSON
                     </label>
                 </div>
-                <div class="input-group" style="height: 50px">
-                    <span class="input-group-addon"
-                          style="margin-top: 6px;margin-right: 10px;"> 参数: </span>
-                    <label for="parameter"></label><input id="parameter" type="text" class="form-control" value="{}">
+                <div class="input-group" style="height: 230px">
+                    <span class="input-group-addon option-tile" style="margin-bottom: 8px;">
+                        parameter：</span>
+                    <div class="input-group mb-3">
+                        <div class="input-group">
+                            <div id="parameter" style="width: 100%"></div>
+                        </div>
+                    </div>
+                    <p style="color: #888989">说明：以字典的形式设置参数，如{"name":"yifan"}</p>
                 </div>
-                <p style="color: #888989">说明：以字典的形式设置参数，如{"name":"yifan"}</p>
 
                 <div style="float: right;margin-right: 10px;">
                     <button type="button" class="btn btn-primary" onclick="sendFun()">发送</button>
@@ -56,29 +64,80 @@
     <script crossorigin="anonymous"
             integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg=="
             src="https://lib.baomitu.com/jquery/3.5.1/jquery.min.js"></script>
-    <script>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/jquery-jsonview/1.2.3/jquery.jsonview.css">
+    <script src="https://cdn.bootcss.com/jquery-jsonview/1.2.3/jquery.jsonview.js"></script>
+    <link href="https://cdn.bootcss.com/jsoneditor/5.32.5/jsoneditor.css" rel="stylesheet">
+    <script src="https://cdn.bootcss.com/jsoneditor/5.32.5/jsoneditor.js"></script>
+    <script type="text/javascript">
+
+        //初始化JSONeditor编辑框
+        var parameter = document.getElementById("parameter");
+        var header = document.getElementById("header");
+        var options = {
+            mode: "code"
+        };
+        var headerEditor = new JSONEditor(parameter, options);
+        var parameterEditor = new JSONEditor(header, options);
+
         function sendFun() {
             req_url = $('#req_url').val();
             req_method = $('input[name="req_method"]:checked').val();
-            req_header = $('#header').val();
             req_type = $('input[name="par_type"]:checked').val();
-            req_paramter = $('#parameter').val();
+            {#在对象中获取值#}
+            req_paramter = parameterEditor.get();
+            req_header = headerEditor.get();
+            {#转换为字符串，之后传入get请求参数#}
+            let header_str = JSON.stringify(req_header, null, 2);
+            let parameter_Str = JSON.stringify(req_paramter, null, 2);
 
             $.get("/case/send_req/", {
                 url: req_url,
                 method: req_method,
-                header: req_header,
+                header: header_str,
                 per_type: req_type,
-                per_value: req_paramter,
+                per_value: parameter_Str,
             }, function (resp) {
                 console.log(resp);
-                if (resp.status == 10200) {
-                    document.querySelector("#result").value=resp.data;
-                }else {
+                if (resp.code == 10200) {
+                    document.querySelector("#result").value = resp.data;
+                } else {
                     window.alert(resp.message)
                 }
             })
         }
 
     </script>
+    <style>
+        .option {
+            height: 50px;
+        }
+
+        .option-tile {
+            margin-top: 5px;
+            margin-right: 10px;
+        }
+
+        div.jsoneditor {
+            border: thin solid #ced4da;
+        }
+
+        div.jsoneditor-menu {
+            display: none;
+        }
+
+        .ace-jsoneditor .ace_gutter {
+            background: white;
+        }
+
+        div.jsoneditor-outer.has-main-menu-bar {
+            margin-top: 0px;
+            padding-top: 0px;
+        }
+
+        .per-label {
+            margin-right: 10px;
+            margin-bottom: 4px;
+            font-size: 1rem;
+        }
+    </style>
 {% endblock %}

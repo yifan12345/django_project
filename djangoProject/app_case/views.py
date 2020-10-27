@@ -17,15 +17,17 @@ def send_req(request):
         header = request.GET.get("header", "")
         per_type = request.GET.get("per_type", "")
         per_value = request.GET.get("per_value", "")
-        # try:
-        #     header = json.loads(header)
-        # except json.decoder.JSONDecodeError:
-        #     return JsonResponse({"status": 10101, "message": "header格式错误，必须是标准的json格式"})
+        if url == "":
+            return JsonResponse({"code": 10101, "message": "url不能为空"})
+        try:
+            header = json.loads(header)
+        except json.decoder.JSONDecodeError:
+            return JsonResponse({"code": 10101, "message": "header格式错误，必须是标准的json格式"})
 
         try:
             per_value = json.loads(per_value)
         except json.decoder.JSONDecodeError:
-            return JsonResponse({"status": 10101, "message": "参数错误，必须是标准的json格式"})
+            return JsonResponse({"code": 10101, "message": "参数错误，必须是标准的json格式"})
 
         if method == "get":
             r = requests.get(url=url, params=per_value, headers=header)
@@ -35,4 +37,4 @@ def send_req(request):
             if per_type == "json":
                 r = requests.post(url=url, json=per_value, headers=header)
 
-    return JsonResponse({"status": 10200, "message": "success", "data": r.text})
+    return JsonResponse({"code": 10200, "message": "success", "data": r.text})
