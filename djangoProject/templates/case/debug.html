@@ -11,29 +11,29 @@
                 <div class="input-group" style="height: 50px">
                     <span class="input-group-addon"
                           style="margin-top: 6px;margin-right: 10px;"> URL: </span>
-                    <input id="req_url" type="text" class="form-control" value="http">
+                    <label for="req_url"></label><input id="req_url" type="text" class="form-control" value="http">
                 </div>
                 <div>
                     <label>* 请求方法：</label>
                     <label class="radio-inline">
-                        <input type="radio" name="req_method" id="get">GET
+                        <input type="radio" name="req_method" id="get" value="get">GET
                     </label>
                     <label class="radio-inline">
-                        <input type="radio" name="req_method" id="post">POST
+                        <input type="radio" name="req_method" id="post" value="post">POST
                     </label>
                 </div>
                 <div class="input-group" style="height: 50px">
                     <span class="input-group-addon"
                           style="margin-top: 6px;margin-right: 10px;"> header: </span>
-                    <label for="req_url"></label><input id="req_url" type="text" class="form-control" value="{}">
+                    <label for="header"></label><input id="header" type="text" class="form-control" value="{}">
                 </div>
                 <div>
                     <label>* 参数类型：</label>
                     <label class="radio-inline">
-                        <input type="radio" name="par_type" id="form">form-data
+                        <input type="radio" name="par_type" id="form" value="form">form-data
                     </label>
                     <label class="radio-inline">
-                        <input type="radio" name="par_type" id="JSON">JSON
+                        <input type="radio" name="par_type" id="json" value="json">JSON
                     </label>
                 </div>
                 <div class="input-group" style="height: 50px">
@@ -46,6 +46,10 @@
                 <div style="float: right;margin-right: 10px;">
                     <button type="button" class="btn btn-primary" onclick="sendFun()">发送</button>
                 </div>
+                <div style="margin-top: 30px;">
+                    <p>返回结果：</p>
+                    <textarea id="result" class="form-control" rows="10" name=textarea></textarea>
+                </div>
             </div>
         </div>
     </div>
@@ -54,13 +58,25 @@
             src="https://lib.baomitu.com/jquery/3.5.1/jquery.min.js"></script>
     <script>
         function sendFun() {
-            $.get("/case/send_req/", {
-                id: "1",
-                name: "tom"
+            req_url = $('#req_url').val();
+            req_method = $('input[name="req_method"]:checked').val();
+            req_header = $('#header').val();
+            req_type = $('input[name="par_type"]:checked').val();
+            req_paramter = $('#parameter').val();
 
-            }, function (data, status) {
-                console.log("data", data)
-                console.log("status", status)
+            $.get("/case/send_req/", {
+                url: req_url,
+                method: req_method,
+                header: req_header,
+                per_type: req_type,
+                per_value: req_paramter,
+            }, function (resp) {
+                console.log(resp);
+                if (resp.status == 10200) {
+                    document.querySelector("#result").value=resp.data;
+                }else {
+                    window.alert(resp.message)
+                }
             })
         }
 
