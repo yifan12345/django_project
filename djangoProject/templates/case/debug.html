@@ -4,80 +4,133 @@
     <div class="navbar navbar-expand navbar-light bg-white">
         <div class="flex-fill w-100 card" style="height: 100%;width: 100%">
             <div class="card-header">
-                <h4 class="mb-0 card-title" style="float: left">新增项目</h4>
+                <h4 class="mb-0 card-title" style="float: left">新增接口</h4>
             </div>
-
             <div style="margin-left: 20px;margin-right: 20px;width: 80%">
-                <div class="input-group" style="height: 50px">
-                    <span class="input-group-addon"
-                          style="margin-top: 6px;margin-right: 10px;"> URL: </span>
+                {#                URL#}
+                <div class="input-group option">
+                    <span class="input-group-addon option-tile"> URL: </span>
                     <label for="req_url"></label><input id="req_url" type="text" class="form-control" value="http">
                 </div>
-                <div>
+                {#                请求方法#}
+                <div class="option">
                     <label>* 请求方法：</label>
                     <label class="radio-inline">
-                        <input type="radio" name="req_method" id="get" value="get">GET
+                        <input type="radio" name="req_method" id="get" value="get" checked>GET
                     </label>
                     <label class="radio-inline">
                         <input type="radio" name="req_method" id="post" value="post">POST
                     </label>
                 </div>
-                <div class="input-group" style="height: 230px">
-                    <span class="input-group-addon"
-                          style="margin-top: 6px;margin-right: 10px;"> header: </span>
+                {#                请求头#}
+                <div class="input-group">
+                    <span class="input-group-addon option-tile"> header: </span>
                     <div class="input-group mb-3">
                         <div class="input-group">
-                            <div id="header" style="width: 100%"></div>
+                            <div id="headerEditor" style="width: 100%"></div>
                         </div>
                     </div>
                 </div>
+                {#                参数类型#}
                 <div>
                     <label>* 参数类型：</label>
                     <label class="radio-inline">
-                        <input type="radio" name="par_type" id="form" value="form">form-data
+                        <input type="radio" name="par_type" id="form" value="form" checked>form-data
                     </label>
                     <label class="radio-inline">
                         <input type="radio" name="par_type" id="json" value="json">JSON
                     </label>
                 </div>
+                {#                参数#}
                 <div class="input-group" style="height: 230px">
-                    <span class="input-group-addon option-tile" style="margin-bottom: 8px;">
-                        parameter：</span>
+                    <span class="input-group-addon option-tile option-tile">parameter：</span>
                     <div class="input-group mb-3">
                         <div class="input-group">
-                            <div id="parameter" style="width: 100%"></div>
+                            <div id="parameterEditor" style="width: 100%"></div>
                         </div>
                     </div>
-                    <p style="color: #888989">说明：以字典的形式设置参数，如{"name":"yifan"}</p>
+                    <p>说明：以字典的形式设置参数，如{"name":"yifan"}</p>
                 </div>
-
+                {#                发送按钮#}
                 <div style="float: right;margin-right: 10px;">
                     <button type="button" class="btn btn-primary" onclick="sendFun()">发送</button>
                 </div>
+                {#                响应结果#}
                 <div style="margin-top: 30px;">
                     <p>返回结果：</p>
                     <textarea id="result" class="form-control" rows="10" name=textarea></textarea>
                 </div>
+                {#                断言按钮#}
+                <div style="float: right;margin-right: 10px;margin-top: 20px;">
+                    <button type="button" class="btn btn-primary" onclick="assertFun()">断言</button>
+                </div>
+                {#                断言方法#}
+                <div class="option" style="margin-top: 20px;">
+                    <label>* 断言方法：</label>
+                    <label class="radio-inline">
+                        <input type="radio" name="assert_type" id="include" value="include" checked>包含
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="assert_type" id="equal" value="equal">相等
+                    </label>
+                </div>
+                {#                断言#}
+                <div>
+                    <p>断言：</p>
+                    <textarea id="assert" class="form-control" rows="10" name=textarea></textarea>
+                </div>
+                {#                选择项目/模块#}
+                <div class="form-group" style="margin-top: 20px; height: 30px;">
+                    <label style="float: left; margin-bottom: 0px; margin-top: 8px;">项目/模块：</label>
+                    <span style="float: left">
+                            <select class="form-control" id="selectProject"
+                                    style="width: 180px">
+                            </select>
+                        </span>
+                    <span style="float: left">
+                            <select class="form-control" id="selectModule"
+                                    style="width: 180px">
+                            </select>
+                    </span>
+                </div>
+                {#                用例名称#}
+                <div class="input-group option">
+                    <span class="input-group-addon option-tile"> 名称: </span>
+                    <label for="case_name"></label><input id="case_name" type="text" class="form-control">
+                </div>
+                {#                保存用例按钮#}
+                <div style="float: right;margin-right: 10px;margin-top: 20px;">
+                    <button type="button" class="btn btn-primary" onclick="saveFun()">保存</button>
+                </div>
             </div>
         </div>
     </div>
+    {#    引入jquery#}
     <script crossorigin="anonymous"
             integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg=="
             src="https://lib.baomitu.com/jquery/3.5.1/jquery.min.js"></script>
+    {#    引入Jquery_json插件，控制文本框显示#}
     <link rel="stylesheet" href="https://cdn.bootcss.com/jquery-jsonview/1.2.3/jquery.jsonview.css">
     <script src="https://cdn.bootcss.com/jquery-jsonview/1.2.3/jquery.jsonview.js"></script>
     <link href="https://cdn.bootcss.com/jsoneditor/5.32.5/jsoneditor.css" rel="stylesheet">
     <script src="https://cdn.bootcss.com/jsoneditor/5.32.5/jsoneditor.js"></script>
-    <script type="text/javascript">
+    <script src="/static/js/manage.js"></script>
 
+    <script type="text/javascript">
+        SelectInit()
+        $.ajaxSetup({
+            data: {csrfmiddlewaretoken: '{{ csrf_token }}'}
+        });
         //初始化JSONeditor编辑框
-        var parameter = document.getElementById("parameter");
-        var header = document.getElementById("header");
+        var parameters = document.getElementById("parameterEditor");
+        var headers = document.getElementById("headerEditor");
         var options = {
             mode: "code"
         };
-        var headerEditor = new JSONEditor(parameter, options);
-        var parameterEditor = new JSONEditor(header, options);
+        var parameterEditor = new JSONEditor(parameters, options);
+        var headerEditor = new JSONEditor(headers, options);
+
+        {#发生接口#}
 
         function sendFun() {
             req_url = $('#req_url').val();
@@ -87,18 +140,18 @@
             req_paramter = parameterEditor.get();
             req_header = headerEditor.get();
             {#转换为字符串，之后传入get请求参数#}
-            let header_str = JSON.stringify(req_header, null, 2);
-            let parameter_Str = JSON.stringify(req_paramter, null, 2);
-
+            let req_header_str = JSON.stringify(req_header, null, 2);
+            let req_parameter_Str = JSON.stringify(req_paramter, null, 2);
+            {#接口调试#}
             $.get("/case/send_req/", {
                 url: req_url,
                 method: req_method,
-                header: header_str,
+                header: req_header_str,
                 per_type: req_type,
-                per_value: parameter_Str,
+                per_value: req_parameter_Str,
             }, function (resp) {
                 console.log(resp);
-                if (resp.code == 10200) {
+                if (resp.code === 10200) {
                     document.querySelector("#result").value = resp.data;
                 } else {
                     window.alert(resp.message)
@@ -106,7 +159,70 @@
             })
         }
 
+        {#断言#}
+
+        function assertFun() {
+            var result_text = $('#result').val();
+            var assert_text = $('#assert').val();
+            var assert_type = $('input[name="assert_type"]:checked').val();
+            if (result_text === "" || assert_text === "") {
+                window.alert("断言的结果不能为空")
+            }
+            $.post("/case/assert_result/", {
+                result_text: result_text,
+                assert_text: assert_text,
+                assert_type: assert_type
+            }, function (resp) {
+                if (resp.code === 10200) {
+                    window.alert(resp.message)
+                } else {
+                    window.alert(resp.message)
+                }
+                console.log("resp", resp)
+            })
+        }
+
+        {#保存用例#}
+
+        function saveFun() {
+            req_url = $('#req_url').val();
+            req_method = $('input[name="req_method"]:checked').val();
+            req_type = $('input[name="par_type"]:checked').val();
+            {#在对象中获取值#}
+            req_header = headerEditor.get();
+            req_paramter = parameterEditor.get();
+
+            {#转换为字符串，之后传入get请求参数#}
+            let req_header_str = JSON.stringify(req_header, null, 2);
+            let req_parameter_Str = JSON.stringify(req_paramter, null, 2);
+            var result_text = $('#result').val();
+            var assert_text = $('#assert').val();
+            var assert_type = $('input[name="assert_type"]:checked').val();
+            var module_id = $('select[id="selectModule"]').val();
+            var case_name = $('#case_name').val();
+            {#接口调试#}
+            $.post("/case/save_case/", {
+                url: req_url,
+                method: req_method,
+                per_type: req_type,
+                header: req_header_str,
+                per_value: req_parameter_Str,
+                result_text: result_text,
+                assert_text: assert_text,
+                assert_type: assert_type,
+                module_id: module_id,
+                case_name: case_name
+            }, function (resp) {
+                if (resp.code == 10200) {
+                    window.alert(resp.message)
+                } else {
+                    window.alert(resp.message)
+                }
+            })
+        }
     </script>
+
+
     <style>
         .option {
             height: 50px;
