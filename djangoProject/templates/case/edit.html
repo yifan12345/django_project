@@ -106,20 +106,25 @@
         </div>
     </div>
     {#    引入jquery#}
-    <script src="/static/js/jquery.min.js"></script>
+    <script crossorigin="anonymous"
+            integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg=="
+            src="https://lib.baomitu.com/jquery/3.5.1/jquery.min.js"></script>
     {#    引入Jquery_json插件，控制文本框显示#}
-    <link href="/static/css/jsonview.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/jsonview.css">
     <script src="/static/js/jsonview.js"></script>
     <link href="/static/css/jsoneditor.css" rel="stylesheet">
     <script src="/static/js/jsoneditor.js"></script>
     <script src="/static/js/manage.js"></script>
+    <script src="/static/js/case.js"></script>
 
     <script type="text/javascript">
-        SelectInit()
+        //SelectInit()
+        getCaseInfo()
 
         $.ajaxSetup({
             data: {csrfmiddlewaretoken: '{{ csrf_token }}'}
         });
+
         //初始化JSONeditor编辑框
         var parameters = document.getElementById("parameterEditor");
         var headers = document.getElementById("headerEditor");
@@ -187,6 +192,8 @@
         {#保存用例#}
 
         function saveFun() {
+            var url = window.location.href;
+            var caseId = url.split("/")[5];
             req_url = $('#req_url').val();
             req_method = $('input[name="req_method"]:checked').val();
             req_type = $('input[name="par_type"]:checked').val();
@@ -204,6 +211,7 @@
             var case_name = $('#case_name').val();
             {#接口调试#}
             $.post("/case/save_case/", {
+                "cid":caseId,
                 url: req_url,
                 method: req_method,
                 per_type: req_type,

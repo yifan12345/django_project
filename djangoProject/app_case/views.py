@@ -1,18 +1,81 @@
 import json
 import requests
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
-from django.http import JsonResponse
-from app_manage.models import Project, Module
 from app_case.models import TestCase
-
+from app_manage.models import Project, Module
+from django.forms.models import model_to_dict
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.http import JsonResponse, HttpResponseRedirect
+from django.views.decorators.csrf import csrf_exempt
 
 # Create your views here.
-def list_case(request):
+def case_list(request):
+    '''
+    用例列表
+    :param request:
+    :return:
+    '''
+    # 根据id对数据进行排序
+    case_list = TestCase.objects.all().order_by("id")
+    # 对数据进行分页处理，每页10行显示
+    p = Paginator(case_list, 10)
+    # 通过请求得到需要第几页的数据
+    page = request.GET.get("page", "")
+    if page == "":
+        page = 1
+    try:
+        page_cases = p.page(page)
+    except PageNotAnInteger:
+        # 如果页数不是整型去第一页
+        page_cases = p.page(1)
+    except EmptyPage:
+        # 如果页数超出范围：取最后一页
+        page_cases = p.page(p.num_pages)
+    return render(request, "case/list.html", {"cases": page_cases})
+
+
+def new_case(request):
+    '''
+    新增用例
+    :param request:
+    :return:
+    '''
     return render(request, "case/debug.html")
 
 
-# 发送请求
+def edit_case(request, cid):
+    '''编辑模块'''
+    return render(request, "case/edit.html")
+
+def case_delete(request,cid):
+    """删除用例"""
+    if request.method == "GET":
+        case = TestCase.objects.get(id=cid)
+        case.delete()
+        return HttpResponseRedirect('/case/')
+    else:
+        return HttpResponseRedirect('/case/')
+
+@csrf_exempt
+def get_case_info(request):
+    """获取接口数据"""
+    if request.method == "POST":
+        cid = request.POST.get("cid", "")
+        case = TestCase.objects.get(id=cid)
+        module = Module.objects.get(id=case.module_id)
+        case_info = model_to_dict(case)
+        case_info["project"] = module.project_id
+        return JsonResponse({"code": 10200,
+                             "message": "success",
+                             "data": case_info})
+    else:
+        return JsonResponse({"code": 10100, "message": "请求方法错误"})
+
+
+
 def send_req(request):
+    '''发送请求'''
     global r
     if request.method == "GET":
         url = request.GET.get("url", "")
@@ -93,8 +156,9 @@ def get_select_data(request):
 
 
 def save_case(request):
+    '''保存&更新case'''
     if request.method == "POST":
-
+        case_id = request.POST.get('cid', "")
         url = request.POST.get('url', "")
         method = request.POST.get('method', "")
         per_type = request.POST.get('per_type', "")
@@ -125,16 +189,33 @@ def save_case(request):
             assert_type_int = 2
         else:
             return JsonResponse({"code": 10103, "message": "断言类型错误"})
+        if case_id == "":
+            TestCase.objects.create(module_id=module_id,
+                                    name=case_name,
+                                    url=url,
+                                    method=method_int,
+                                    header=header,
+                                    parameter_type=per_type_int,
+                                    parameter_body=per_value,
+                                    result=result_text,
+                                    assert_type=assert_type_int,
+                                    assert_text=assert_text,
+                                    )
+            return JsonResponse({"code": 10200, "message": "create success"})
+        else:
+            case = TestCase.objects.get(id=case_id)
+            case.module_id = module_id
+            case.name = case_name
+            case.url = url
+            case.method = method_int
+            case.case.header = header
+            case.parameter_type = per_type_int
+            case.parameter_body = per_value
+            case.result = result_text
+            case.assert_type = assert_type_int
+            case.assert_text = assert_text
+            case.save()
+            return JsonResponse({"code": 10200, "message": "save success"})
 
-        TestCase.objects.create(module_id=module_id,
-                                name=case_name,
-                                url=url,
-                                method=method_int,
-                                header=header,
-                                parameter_type=per_type_int,
-                                parameter_body=per_value,
-                                result=result_text,
-                                assert_type=assert_type_int,
-                                assert_text=assert_text,
-                                )
-        return JsonResponse({"code": 10200, "message": "success"})
+    else:
+        return JsonResponse({"code": 10100, "message": "请求方法错误"})
